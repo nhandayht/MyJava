@@ -24,10 +24,9 @@ public class StudentController implements IController<StudentDTO> {
         dao = new StudentDAO();
         List<Student> students = dao.selectAll();
         List<StudentDTO> studentDTOs = new ArrayList<>();
-        for (Student s : students) {
-            StudentDTO studentDTO = StudentMapping.modelToDTO(s);
+        students.stream().map((s) -> StudentMapping.modelToDTO(s)).forEachOrdered((studentDTO) -> {
             studentDTOs.add(studentDTO);
-        }
+        });
         return studentDTOs;
 
     }
