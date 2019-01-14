@@ -23,7 +23,7 @@ public class StudentMapping implements IMapping<Student, StudentDTO> {
 
     DateConvert dateConvert = new DateConvert();
     GenderConvert genderConvert = new GenderConvert();
-    IMapping<Course, CourseDTO> iMapping = new CourseMapping();
+    IMapping<Course, CourseDTO> iMapping;
 
     @Override
     public StudentDTO toDTo(Student e) {
@@ -33,10 +33,13 @@ public class StudentMapping implements IMapping<Student, StudentDTO> {
         studentDTO.setName(e.getName());
         studentDTO.setDob(dateConvert.dateToString(e.getDob()));
         studentDTO.setIdCourse(e.getIdCourse());
-        studentDTO.setCourseDTO(iMapping.toDTo(e.getCourse()));
+        if (e.getCourse() != null) {
+            iMapping = new CourseMapping();
+            studentDTO.setCourseDTO(iMapping.toDTo(e.getCourse()));
+        }
         return studentDTO;
     }
-    
+
     @Override
     public Student toEntity(StudentDTO d) {
         Student student = new Student();
@@ -50,8 +53,8 @@ public class StudentMapping implements IMapping<Student, StudentDTO> {
         }
         student.setIdCourse(d.getIdCourse());
         student.setCourse(iMapping.toEntity(d.getCourseDTO()));
-        
+
         return student;
     }
-    
+
 }
